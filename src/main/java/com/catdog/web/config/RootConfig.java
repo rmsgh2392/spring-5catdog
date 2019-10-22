@@ -22,7 +22,7 @@ public class RootConfig {
 		hikarConfig.setUsername("catdog");
 		hikarConfig.setPassword("catdog");
 		HikariDataSource dataSource = new HikariDataSource(hikarConfig);
-		
+		//test
 		return dataSource;
 	}
 	
