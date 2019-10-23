@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 
 @EnableWebMvc
-@ComponentScan(basePackages= {"com.catdog.web.controller"})
+@ComponentScan(basePackages= {"com.catdog.web"})
 public class ServletConfig implements WebMvcConfigurer{
 	//책 116페이지 참고 
 	@Override
