@@ -43,23 +43,21 @@ public class CustomerCtrl {
 	@PostMapping("/")//customers데 아무것도 없으면 가져온값을 집어넣으라는 뜻 파라미터가 있으면 get없으면 post 아이디 유/무로 판단 
 	public String join(@RequestBody Customer param) {//<?,?> ?는 와일드 카드 
 //		request.getparameter("cid")를 안해도 가져올수 있다.
+//		logger.info("ajax가 보낸 아이디와 비번입니다 {} ",param.getCid()+","+param.getPwd()+","+param.getPname());
+//		리턴타입이 void, 이름이 번쩍하고 메퍼에다가 던져주고 없어진다.c가 있으면 이름이 있으므로 람다는 익명함수
+		String result = "";
+		 IConsumer<Customer> c = t->customerMapper.insertCustomer(t);
+		 c.accept(param);
+		 return result;
+
 		
-		logger.info("ajax가 보낸 아이디와 비번입니다 {} ",param.getCid()+","+param.getPwd()+","+param.getPname());
-		new IConsumer() {//리턴타입이 void, 이름이 번쩍하고 메퍼에다가 던져주고 없어진다.c가 있으면 이름이 있으므로 람다는 익명함수
-			@Override
-			public void accept(Object o) {
-				customerMapper.insertCustomer(param);
-			}
-		};
-//		Map<String,String> map = new HashMap<>();
-		return "SUCCESS";
 	} 
+	
 	
 	@PostMapping("/login")
 	public Customer login(@RequestBody Customer param){//이제 무조건 객체로 던져야한다.rest방식 서비스임플이 람다로 다오임플이 마이바티스
-		IFunction f = o-> customerMapper.selectById(param);
-		Customer c = (Customer) f.apply(param);
-		return customer;
+		IFunction<Customer,Customer> f = t-> customerMapper.selectById(param);
+		return f.apply(param);
 	}
 }
 //		1단계

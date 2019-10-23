@@ -1,5 +1,5 @@
 package com.catdog.web.cmm;
 @FunctionalInterface
-public interface IPredicate {
-	public abstract boolean test(Object o);
+public interface IPredicate<T> {
+	public boolean test(T t);
 }

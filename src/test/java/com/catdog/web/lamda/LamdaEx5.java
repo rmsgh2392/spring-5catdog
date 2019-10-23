@@ -22,6 +22,7 @@ public class LamdaEx5 {
 	}
 	
 	static <T> void makeRandomList(Supplier<T> s ,List<T> list) {
+		//fm되로하면 인터페이스 걸어서 메서드 하나만 만들어줘야한다 (스태틱도 한개)
 		//스프링에서는 메서드는 static으로 한다고 생각하자
 		for(int i=0; i<10;i++)
 			list.add(s.get());

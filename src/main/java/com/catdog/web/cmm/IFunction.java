@@ -1,6 +1,5 @@
 package com.catdog.web.cmm;
 @FunctionalInterface
-
-public interface IFunction {
-	public abstract Object apply(Object o);
+public interface IFunction<T , R> {
+	public R apply(T t);
 }
