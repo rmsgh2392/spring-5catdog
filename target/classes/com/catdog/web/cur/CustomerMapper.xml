@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.catdog.web.cur.CustomerMapper">
+ 
+
+    <select id="selectCustomerById" resultType="Customer">
+       SELECT * FROM CUSTOMER
+			WHERE CID LIKE #{cid}
+    </select>
+    <insert id="insertCustomer" parameterType="Customer">
+        INSERT INTO CUSTOMER (CID,PWD,SSN,CREDITCARD,PNAME,PHONE,ADDRESS,EMAIL) values (
+            #{cid}, #{pwd},#{ssn},#{creditcard},#{pname},#{phone},#{address},#{email})
+    </insert>
+    <select id="existId"  resultType="int">
+    	SELECT COUNT(*) CT FROM CUSTOMER WHERE CID LIKE #{cid}
+    </select>
+</mapper>

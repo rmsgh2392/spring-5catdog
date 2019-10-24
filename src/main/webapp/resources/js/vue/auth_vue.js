@@ -293,15 +293,9 @@ auth_vue = {
 		'  <p class="mt-5 mb-3 text-muted">© 2017-2019</p>'+
 		'  </div>'+
 		'</form>'
-	},
-	mypage : d=>{
-		return '<input id="h1_btn" type="button" value="안녕하세여 마이페이지입니다."></input>'+
-				'<body>'+
-			   '<div id="div1">안녕하세여 '+d.pname+'님'+'</br>'+'귀하의 아이디는 '+d.cid+'</br>'+'비번은'+d.pwd+'입니다'+
-			   '주민번호 :'+d.ssn+'신용카드 :'+d.creditcard+'폰번호 :'+d.phone+'주소 :'+d.address+'이메일 : '+d.email+'입니다'+
-			   '</div>'+
-			   '</body>'
 	}
+
+	
 	
 	
 };

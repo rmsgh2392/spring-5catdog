@@ -1,4 +1,4 @@
-package com.catdog.web.config;
+package com.catdog.web.cfg;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -3,48 +3,68 @@
 var auth = auth || {};//객체가 딱 하나 만들어진다 .언제? index.jsp에서 cdn방식으로 한번 만들어진다 (싱글턴 객체)!! 
 auth =(()=>{
 	const WHEN_ERR ='화면을 찾지 못했습니다'
-	let _,js,auth_vuejs;
+	let _,js,auth_vuejs,brd_vuejs;
 	let init =()=>{
 		_ = $.ctx();
 		js = $.js();
 		auth_vuejs = $.js()+'/vue/auth_vue.js'
+		brd_vuejs = $.js()+'/vue/brd_vue.js'
 	}
 	let onCreate =()=>{
 		init();
-		$.getScript(auth_vuejs)
-		.done(()=>{
-			setContentView()//처음 화면을 띄어주는거 클릭하기 전까지 
-			$('#a_join').click(e=>{
-				e.preventDefault()
-				join()
-			})
-		}).fail(()=>{alert(WHEN_ERR)})
-		
+		$.getScript(auth_vuejs).done(()=>{
+        	setContentView()
+    		$('#a_join').click(e=>{
+         		e.preventDefault()
+  				$.getScript(auth_vuejs)
+					$('head').html(auth_vue.join_head())
+					$('body').html(auth_vue.join_body())
+					$('<button>',{
+							text : '회원가입' , 
+							href: '#' ,
+							click : e=>{
+				         		e.preventDefault()
+								let data = { 
+										cid :  $('#cid').val() ,
+										pwd : $('#pwd').val(),
+										pname : $('#pname').val()
+								}
+								if(exist(data.cid)==='true')
+									alert(exist(data.cid))
+									join(data)
+							} 
+						})
+						.addClass('btn btn-primary btn-lg btn-block')
+						.appendTo('#btn_join')       		
+    		})
+        }).fail(()=>{alert(WHEN_ERR)})
 	}
 	let setContentView =()=>{
 			login()
 	}
+	
+	let exist=x=>{
+		$.ajax({
+			url : _+'/customers/'+x+'/exist',
+			type : 'GET',
+			contentType : 'application/json',
+			success : d =>{
+				if(d.msg==='success'){
+					alert('사용되는 아이디가 없습니다'+d.msg)
+					return true
+				}else{
+					alert('있는아이디')
+					return false
+				}
+			},
+			error : e=>{
+				alert('error')
+				return false
+			}
+		})
+	}
 		
-	let join =()=>{
-			$.getScript(auth_vuejs)
-			$('head').html(auth_vue.join_head())//오버라이딩이 일어남
-		    $('body').html(auth_vue.join_body())
-		    $('<button>',{
-				text:'회원가입',
-				href:'#',
-				click : e=>{
-					e.preventDefault() 
-					let data = {
-						cid : $('#cid').val(),
-						pwd : $('#pwd').val(),
-						ssn : $('#ssn').val(),
-						creditcard : $('#creditcard').val(),
-						pname : $('#pname').val(),
-						phone : $('#phone').val(),
-						address : $('#address').val(),
-						email : $('#email').val()
-					}
-					alert('cid :'+ data.cid+'pwd :'+data.pwd +'ssn :'+data.ssn+'email :'+data.email)
+	let join =data=>{
 					$.ajax({
 						url : _+'/customers/',
 						type : 'POST',//crud 4개중 하나
@@ -52,20 +72,18 @@ auth =(()=>{
 						data : JSON.stringify(data),//상대방의 받는녀석의 기준이되서 타입을 맞춰준다.
 						contentType : 'application/json',
 						success : d => {
-							alert('AJAX 성공입니당 아이디:'+d.cid+',성공비번 :'+d.pwd+',이름 :'+d.pname+',주민 :'+d.ssn)
-							login()
+							alert('AJAX 성공입니당 :'+d.msg)
+							if(d.msg==='success')
+								login()
 						},
 						error : e =>{
 							alert('ajax실패')
 						}
 					})
+					
 				}
-				})
-				.addClass("btn btn-primary btn-lg btn-block")
-				.appendTo('#btn_join')
-	}
 
-		let login =()=>{
+	let login =()=>{
 			let x = {css : $.css(),img : $.img()}
 			$('head')
 			.html(auth_vue.login_head(x))
@@ -85,14 +103,14 @@ auth =(()=>{
 					alert('cid : '+login_data.cid)
 					$.ajax({
 						//전부다 스트링값 뒤에틑 값이니까 객체도 들어오고 스트링도 들어오고 함
-						url : _+'/customers/login',
+						url : _+'/customers/'+$('#cid').val(),
 						type : 'POST',
 						dataType : 'json',
 						data : JSON.stringify(login_data),
 						contentType : 'application/json',//밈 -->jsp에서 contentType="text/html"내가던지는 녀석이 다른쪽에서도 
 						success :  d=>{
 							alert(d.pname+'님 환영합니다')
-							mypage(d)
+							brd_main()
 						},
 						error : e=>{
 							alert(WHEN_ERR)
@@ -104,13 +122,15 @@ auth =(()=>{
 			.addClass("btn btn-lg btn-primary btn-bloc")
 			.appendTo('#login_btn')
 		}
-		
-		let mypage =d=>{
-			$('body')
-			.html(auth_vue.mypage(d))
+		let brd_main =()=>{
+			let x = {css : $.css(),img : $.img()}
+			$.getScript(brd_vuejs).done(()=>{
+				$('head').html(brd_vue.brd_head())
+				$('body').addClass('bg-light')
+				.html(brd_vue.brd_body())
+			})
 		}
-		
-		return{onCreate ,join ,login,mypage}//자바스크립
+		return{onCreate ,join ,login,brd_main}//자바스크립
 		
 })();
 //			$('<button>',{

@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.catdog.web.config.RootConfig;
+import com.catdog.web.cfg.RootConfig;
+
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {com.catdog.web.config.RootConfig.class})
+@ContextConfiguration(classes= {com.catdog.web.cfg.RootConfig.class})
 @Log4j
 public class DataSourceTest {
 	@Setter(onMethod_ = {@Autowired})
