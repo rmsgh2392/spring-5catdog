@@ -50,6 +50,7 @@ public class CustomerCtrl {
 		logger.info("exist들어옴");
 		IFunction<String,Integer> f = t->customerMapper.existId(cid);
 		map.clear();
+		printer.accept("값은 :" +f.apply(cid));
 		map.put("msg",(f.apply(cid)==0) ? "success" :"fail");
 		return map;
 	}
@@ -69,7 +70,8 @@ public class CustomerCtrl {
 	} 
 	@PostMapping("/{cid}")// " " -> 상수 
 	public Customer login(@PathVariable String cid,@RequestBody Customer param){//이제 무조건 객체로 던져야한다.rest방식 서비스임플이 람다로 다오임플이 마이바티스
-		IFunction<Customer,Customer> f = t-> customerMapper.selectCustomerById(param);
+		IFunction<Customer,Customer> f = t-> customerMapper.selectCustomerById(t);
+		printer.accept("넘어온값 :"+f.apply(param));
 		return f.apply(param);
 	}
 	@GetMapping("/{cid}")

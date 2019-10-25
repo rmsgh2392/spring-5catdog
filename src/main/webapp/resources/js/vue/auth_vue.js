@@ -92,7 +92,7 @@ auth_vue = {
         '      </form>'+
         '    </div>'+
         '    <div class="col-md-8 order-md-1">'+
-        '      <h4 class="mb-3">Billing address</h4>'+
+        '      <h4 class="mb-3">회원가입</h4>'+
         '      <form class="needs-validation" novalidate="">'+
         '        <div class="row">'+
         '          <div class="col-md-6 mb-3">'+
@@ -103,11 +103,18 @@ auth_vue = {
         '            </div>'+
         '          </div>'+
         '          <div class="col-md-6 mb-3">'+
-        '            <label for="pwd">PASSWORD</label>'+
-        '            <input type="text" class="form-control" id="pwd" placeholder="" value="" required="">'+
+        '            <label for="pwd">아이디 중복체크</label>'+
+        '            <input type="text" class="form-control" id="id_check" placeholder="" value="" required="">'+
         '            <div class="invalid-feedback">'+
         '              Valid last name is required.'+
         '            </div>'+
+        '          </div>'+
+        '        </div>'+
+        '  <div class="mb-3">'+
+        '          <label for="pwd">비밀번호<span class="text-muted">(Optional)</span></label>'+
+        '          <input type="email" class="form-control" id="pwd" placeholder="you@example.com">'+
+        '          <div class="invalid-feedback">'+
+        '            Please enter a valid email address for shipping updates.'+
         '          </div>'+
         '        </div>'+
         '        <div class="mb-3">'+
@@ -120,13 +127,6 @@ auth_vue = {
         '            <div class="invalid-feedback" style="width: 100%;">'+
         '              Your username is required.'+
         '            </div>'+
-        '          </div>'+
-        '        </div>'+
-        '        <div class="mb-3">'+
-        '          <label for="creditcard">신용카드<span class="text-muted">(Optional)</span></label>'+
-        '          <input type="email" class="form-control" id="creditcard" placeholder="you@example.com">'+
-        '          <div class="invalid-feedback">'+
-        '            Please enter a valid email address for shipping updates.'+
         '          </div>'+
         '        </div>'+
         '        <div class="mb-3">'+
@@ -240,7 +240,6 @@ auth_vue = {
         '      <li class="list-inline-item"><a href="#">Support</a></li>'+
         '    </ul>'+
         '  </footer>'+
-        
         '</div>'
 	},
 	login_head : x=>{
@@ -249,7 +248,6 @@ auth_vue = {
 		'  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'+
 		'  <title>Document</title>'+
 		'    <script type="text/javascript" src="<%=application.getContextPath()%>/resources/js/app.js"></script>'+
-		'  '+
 		'  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">'+
 		'   <meta charset="utf-8">'+
 		'    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'+
@@ -274,7 +272,7 @@ auth_vue = {
 		'      }'+
 		'    </style>'+
 		'    <!-- Custom styles for this template -->'+
-		'    <link href="'+x.css+'/signin.css" rel="stylesheet">     '+
+		'    <link href="'+x.css+'/signin.css" rel="stylesheet">'+
 		'</head>'
 	},
 	login_body : x=>{
