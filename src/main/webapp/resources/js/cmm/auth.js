@@ -2,15 +2,16 @@
 "use strict";
 var auth = auth || {};//객체가 딱 하나 만들어진다 .언제? index.jsp에서 cdn방식으로 한번 만들어진다 (싱글턴 객체)!! 
 auth =(()=>{
-	const WHEN_ERR ='화면을 찾지 못했습니다'
-	let _,js,auth_vuejs,brd_vuejs,brd_js;
+	const WHEN_ERR ='당신은 실패자!!'
+	let _,js,auth_vuejs,brd_vuejs,brd_js,router_js;
 	let init =()=>{
 		_ = $.ctx();
 		js = $.js();
 		auth_vuejs = $.js()+'/vue/auth_vue.js'
 		brd_vuejs = $.js()+'/vue/brd_vue.js'
 		brd_js = $.js()+'/brd/brd.js'
-		alert('brd_vue :' +brd_vuejs)
+		router_js = $.js()+'/cmm/router.js'
+		alert('router.js:' +router_js)
 	}
 	let onCreate =()=>{
 		init();
@@ -67,6 +68,7 @@ auth =(()=>{
 		$('body')
 		.addClass('text-center')
 		.html(auth_vue.login_body({css : $.css(),img : $.img()}))
+//		$('#cid').val('aaaaa')
 		login()
 	}
 	
@@ -87,6 +89,8 @@ auth =(()=>{
 								$('body')
 								.html(auth_vue.login_body({css : $.css(),img : $.img()}))
 								.addClass('text-center')
+								
+								
 								//로그인 그림(화면)만 보여주는 부분
 								login(d)
 								//login()을 불러오면 로그인 함수의 기능들을 실행 
@@ -120,9 +124,17 @@ auth =(()=>{
 						contentType : 'application/json',//밈 -->jsp에서 contentType="text/html"내가던지는 녀석이 다른쪽에서도 
 						success :  d=>{
 							alert('넘어온값 :'+d.cid)
-							$.getScript(brd_js, ()=>{
-								brd.onCreate()
+							$.when(
+								$.getScript(router_js,()=>{$.extend(new Customer(d))})//안담길수 있다 ,d가 곧 customer객체
+								,$.getScript(brd_js))
+							.done(()=>{//세션에 담길동안에 brd.oncreate()가 먼저 보내져있다.
+								brd.onCreate()	
 							})
+							.fail(()=>{
+								alert('실패실패')
+							})
+//							alert(d.pname+'님 환영합니다.')
+						
 							
 						},
 						error : e=>{
@@ -136,6 +148,9 @@ auth =(()=>{
 			.appendTo('#login_btn')
 		}
 	
+	return{onCreate ,join ,login}//자바스크립
+	
+})();
 //		let brd_main =()=>{
 //			let x = {css : $.css(),img : $.img()}
 //			$.getScript(brd_vuejs).done(()=>{
@@ -144,9 +159,6 @@ auth =(()=>{
 //				.html(brd_vue.brd_body())
 //			})
 //		}
-		return{onCreate ,join ,login}//자바스크립
-		
-})();
 //			$('<button>',{
 //				text:'회원가입',//text에 값이 있으면 setter
 //				href:'#',

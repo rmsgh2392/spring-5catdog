@@ -146,7 +146,7 @@ brd_vue = {
 			'    <!-- Bootstrap core JavaScript'+
 			'    ================================================== -->'+
 			'    <!-- Placed at the end of the document so the pages load faster -->'+
-			'    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>'+
+			'    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>'+
 			'    <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>'+
 			'    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>'+
 			'    <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/holder.min.js"></script>'+
@@ -156,21 +156,18 @@ brd_vue = {
 
 		},
 	
-		brd_write : x=>{
-			return '<div class="container-fluid" style="width:80%">'
-			+'<h1>ARTICLE WRITING</h1>'
-			+'<form>'
-			+'<input type="text" name="writer" style="margin-top:20px" class="form-control" placeholder="작성자 이름" />'
-			+'<input type="text" name="title" style="margin-top:20px" class="form-control" placeholder="제목" /><br />'
+		brd_write : x=>{//form태그가 최소의 조각 나머지는  노드로 처리하자 , 트리구조 아이디를 안주면된다 루트만 주면됨 
+			return '<div class="container-fluid" style="width:80%">'//껍데기
+			+'<h1>ARTICLE WRITING</h1>'//껍데기
+			+'<form id="write_form">'//실질적인 움직이는녀석 $('#write_form input[name=writer]') ,$('#write_form div.row'), $('#write_form div[style=""]' , form태그가 하나만 있으면 id를 안줘도 유니크한 값이 된다 
+			+'<input type="text"  name="writer" style="margin-top:20px" class="form-control" placeholder="작성자 id"/>'
+			+'<input type="text"  name="title" style="margin-top:20px" class="form-control" placeholder="제목" /><br />'
 			+'<div class="row">'
 			+'<div style="width:97%; margin:10px auto" >'
-			+'<textarea name="content" class="form-control" rows="10" id="comment"></textarea>'
+			+'<textarea name="content" class="form-control" rows="10">'
+			+'</textarea>'//라인이 긴것은 textarea
 			+' </div>'
 			+' </div>'
-			+' <input type="reset" class="btn btn-danger" style="float:right;width:100px;margin-right:10px" value="CANCEL"/>'
-			+'<input name="write" type="submit" class="btn btn-primary" style="float:right;width:100px;margin-right:10px" value="SUBMIT"/>'
-			+'<input type="hidden" name="action" value="write"/>'
-			+'<input type="hidden" name="pageName" value="detail" />'
 			+'</form>'
 			+'</div>'
 		}

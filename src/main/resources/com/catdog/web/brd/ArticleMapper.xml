@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.catdog.web.brd.ArticleMapper">
+    	<insert id="insertArticle" parameterType="Article">
+        INSERT INTO ARTICLES (CID, RATING, BOARD_TYPE, TITLE, CONTENT) values (
+           #{cid}, #{rating}, #{board_type}, #{title}, #{content})
+    	</insert>
+    
+    </mapper>
