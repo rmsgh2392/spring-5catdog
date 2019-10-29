@@ -1,5 +1,6 @@
 package com.catdog.web.brd;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -28,19 +29,18 @@ public class ArticleCtrl {
 	@Autowired Article article;
 	@Autowired Map<String,Object> map;
 	@Autowired ArticleMapper articleMapper;
+	@Autowired List<Article> list;
 
 	
 	
 	@PostMapping("/")
 	public Map<?,?> UpdateWrite(@RequestBody Article param ) {
 		printer.accept("brdctrl에 들어옴");
-		param.setBoard_type("마이펫 게시판");
+		param.setBoardType("마이펫 게시판");
 		printer.accept("cid :" +param.toString());
 		IConsumer<Article> c = t-> articleMapper.insertArticle(t);
-
 		//파라미터와 리턴 사이에 =>에로우펑션을 쓴다. 람다 ~~
 		//한줄이면 블락 생략 가능 위에 제네릭스로 아티클이라는 객체가 이미 타입이 있어서 아티클도 제거 
-//		c.accept(param);
 		map.clear();
 		c.accept(param);
 		map.put("msg", "success");
@@ -49,6 +49,24 @@ public class ArticleCtrl {
 		map.put("count",s.get());
 		printer.accept("카운트 값 :"+s.get());
 		return map;
+	}
+	@PostMapping("/{articleseq}")
+	public Map<?,?> deleteArticle(@PathVariable String articleseq , @RequestBody Article param ){
+		printer.accept("삭제하고싶음 들어와");
+		map.clear();
+		IConsumer<Article> c = t-> articleMapper.deleteArticle(t);
+		c.accept(param);
+		map.put("msg","success");
+		printer.accept("map ::" +map);
+		return map;
+	}
+	
+	@GetMapping("/")
+	public List<Article> list(){
+		list.clear();//하기전에 깨끗이 클리어하고 하자 !!
+		ISupplier<List<Article>> s = ()-> articleMapper.selectAllArticle();//제네릭스 안에 제네릭스가 들어갈 수 있다.
+		printer.accept("전체 글 목록 :\n"+ s.get());
+		return 	s.get();
 	}
 	
 	@GetMapping("/{articleseq}")
@@ -60,11 +78,17 @@ public class ArticleCtrl {
 	}
 	
 	@PutMapping("/{articleseq}")
-	public String UpdateArticle(@PathVariable String articleseq ,@RequestBody Article param) {
-		return null;
-		
+	public Article UpdateArticle(@PathVariable String articleseq ,@RequestBody Article param) {
+		printer.accept("put에 들어옴");
+		list.clear();
+		IConsumer<Article> c = t-> articleMapper.updateArticle(t);
+		c.accept(param);
+		IFunction<Article,Article> f= t->articleMapper.getArticle(t);
+//		f.apply(param);
+		printer.accept("전체글목록 "+f.apply(param));
+		return f.apply(param);
 	}
-	@DeleteMapping("/{articleseq}/comments")
+	@DeleteMapping("/{articleseq}")
 	public Map<?,?> removeArticle(@PathVariable String articleseq, @RequestBody Article param) {
 		return null;
 	}

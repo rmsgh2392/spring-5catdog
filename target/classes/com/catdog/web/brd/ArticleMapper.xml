@@ -11,4 +11,24 @@
     	<select id="countArticle" resultType="int">
     		SELECT COUNT(*) FROM ARTICLES
     	</select>
+    	<!-- as 뒤에는 자바랑 똑같이 해줘야한다. 자바의 변수들은 언더바를 안하기 떄문에 alias를 주어서 자바랑 같게 해준다. -->
+    	<select id="selectAllArticle" resultType="Article">
+    		SELECT A.BOARD_TYPE AS boardType, A.* FROM ARTICLES A 
+    	</select>
+    	
+    	<select id="deleteArticle" parameterType="Article">
+    		DELETE 
+			FROM ARTICLES
+			WHERE ARTICLESEQ LIKE #{articleseq}
+    	</select>
+    	<select id="updateArticle" resultType="Article">
+    	UPDATE ARTICLES
+		SET TITLE = #{title}, CONTENT = #{content}
+		WHERE ARTICLESEQ LIKE #{articleseq}
+    	</select>
+    	
+    	<select id="getArticle" resultType="Article">
+    		SELECT * FROM ARTICLES
+    		WHERE ARTICLESEQ LIKE #{articleseq}
+    	</select>
     </mapper>
