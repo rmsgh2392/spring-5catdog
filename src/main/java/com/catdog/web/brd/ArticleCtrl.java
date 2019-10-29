@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.catdog.web.cmm.IConsumer;
 import com.catdog.web.cmm.IFunction;
+import com.catdog.web.cmm.ISupplier;
 import com.catdog.web.cur.CustomerCtrl;
 import com.catdog.web.utl.Printer;
 
@@ -41,13 +42,17 @@ public class ArticleCtrl {
 		//한줄이면 블락 생략 가능 위에 제네릭스로 아티클이라는 객체가 이미 타입이 있어서 아티클도 제거 
 //		c.accept(param);
 		map.clear();
+		c.accept(param);
 		map.put("msg", "success");
 		printer.accept("map ::" +map);
+		ISupplier<Integer> s = ()-> articleMapper.countArticle();
+		map.put("count",s.get());
+		printer.accept("카운트 값 :"+s.get());
 		return map;
 	}
 	
 	@GetMapping("/{articleseq}")
-	public Article readArticleseqByCid(@PathVariable String articleseq , @RequestBody Article param) {
+	public Map<?,?> readArticleseqByCid(@PathVariable String board_type , @RequestBody Article param) {
 		//@PathVariable String articleseq url에 있는 변수 : /articles/{articleseq}
 		//상태라는 개념!! 값이 상수상태냐 변수 상태냐 데이터가 변할 수 있는 상태냐 없는 상태냐 
 		//path중에서 바뀔 수 있는 부분 
@@ -62,5 +67,14 @@ public class ArticleCtrl {
 	@DeleteMapping("/{articleseq}/comments")
 	public Map<?,?> removeArticle(@PathVariable String articleseq, @RequestBody Article param) {
 		return null;
+	}
+
+	@GetMapping("/count")
+	public Map<?,?> count(){
+		ISupplier<Integer> s = ()-> articleMapper.countArticle();
+		printer.accept("카운트 값 :"+s.get());
+		map.clear();
+		map.put("count",s.get());
+		return map;
 	}
 }

@@ -7,5 +7,8 @@
         INSERT INTO ARTICLES (CID, RATING, BOARD_TYPE, TITLE, CONTENT) values (
            #{cid}, #{rating}, #{board_type}, #{title}, #{content})
     	</insert>
-    
+    	
+    	<select id="countArticle" resultType="int">
+    		SELECT COUNT(*) FROM ARTICLES
+    	</select>
     </mapper>
