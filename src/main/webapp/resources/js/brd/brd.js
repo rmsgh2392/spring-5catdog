@@ -101,7 +101,7 @@ brd = (()=>{
 				//2.json타입 자바스크립트는 객체 타입은 전부 json!!{} 객체구나 [] 컬렉션이구나 어쩃든 타입은 json !!! ,가기전
  				contentType : 'application/json',
  				//3.자바가 보낸것을 이렇게 바꿔라 원래는 application(자바,c파이썬)어떤건지 모르지만 json으로 바꿔라 ,갔다왔을때 타입 
-				success : d=>{
+				success : d=>{//goodbye adios
 					alert('ajax결과 :'+d.msg)
 					$('#recent_updates div.container-fluid').remove()
 					recent_updates()
