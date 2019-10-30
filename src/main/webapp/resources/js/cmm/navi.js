@@ -13,8 +13,7 @@ navi =(()=>{
 		brd_js = js+'/brd/brd.js'
 		navi_vue_js = js+'/vue/navi_vue.js'
 		app_js = js+'app.js'
-		
-		//$cid = $.cid()
+		alert('navi init들어옴')
 	}
 	
 	let setContentView =()=>{
