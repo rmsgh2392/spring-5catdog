@@ -291,6 +291,12 @@ auth_vue = {
 		'  <p class="mt-5 mb-3 text-muted">© 2017-2019</p>'+
 		'  </div>'+
 		'</form>'
+	},
+	mypage : x=>{
+		return '<h1>안녕하세요 '+x.pname+'님 귀하의 아이디는 '+x.cid+' 비밀번호는 '+x.pwd+'</h1>'
+		
+		
+		
 	}
 
 	

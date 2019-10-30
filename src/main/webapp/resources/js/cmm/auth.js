@@ -3,19 +3,27 @@
 var auth = auth || {};//객체가 딱 하나 만들어진다 .언제? index.jsp에서 cdn방식으로 한번 만들어진다 (싱글턴 객체)!! 
 auth =(()=>{
 	const WHEN_ERR ='당신은 실패자!!'
-	let _,js,auth_vuejs,brd_vuejs,brd_js,router_js;
+	let _,js,css,img,auth_vuejs,brd_vuejs,brd_js,router_js,cookie_js;
 	let init =()=>{
-		_ = $.ctx();
-		js = $.js();
-		auth_vuejs = $.js()+'/vue/auth_vue.js'
-		brd_vuejs = $.js()+'/vue/brd_vue.js'
-		brd_js = $.js()+'/brd/brd.js'
-		router_js = $.js()+'/cmm/router.js'
-		alert('router.js:' +router_js)
+		_ = $.ctx()
+		js = $.js()
+		css = $.css()
+		img = $.img()
+		auth_vuejs = js+'/vue/auth_vue.js'
+		brd_vuejs = js+'/vue/brd_vue.js'
+		brd_js = js+'/brd/brd.js'
+		router_js = js+'/cmm/router.js'
+		cookie_js = js+'/cmm/cookie.js'
 	}
 	let onCreate =()=>{
 		init();
-		$.getScript(auth_vuejs).done(()=>{
+		$.when(
+				$.getScript(auth_vuejs),
+				$.getScript(router_js),
+				$.getScript(cookie_js),
+				$.getScript(brd_js)
+		)
+		.done(()=>{
         	setContentView()
     		$('#a_join').click(e=>{
          		e.preventDefault()
@@ -105,7 +113,6 @@ auth =(()=>{
 	let login =()=>{
 			$('<button>',{
 				text : "로그인",
-				
 				href : "#",//json은 자바스크립트 객체라서 기능을 넣어줄 수 있다.
 				click : e =>{
 					e.preventDefault()
@@ -124,18 +131,10 @@ auth =(()=>{
 						contentType : 'application/json',//밈 -->jsp에서 contentType="text/html"내가던지는 녀석이 다른쪽에서도 
 						success :  d=>{
 							alert('넘어온값 :'+d.cid)
-							$.when(
-								$.getScript(router_js,()=>{$.extend(new Customer(d))})//안담길수 있다 ,d가 곧 customer객체
-								,$.getScript(brd_js))
-							.done(()=>{//세션에 담길동안에 brd.oncreate()가 먼저 보내져있다.
+							setCookie("cid",d.cid)
+							//세션에 담길동안에 brd.oncreate()가 먼저 보내져있다.
+							alert('저장된 쿠키 : '+getCookie("cid"))
 								brd.onCreate()	
-							})
-							.fail(()=>{
-								alert('실패실패')
-							})
-//							alert(d.pname+'님 환영합니다.')
-						
-							
 						},
 						error : e=>{
 							alert(WHEN_ERR)

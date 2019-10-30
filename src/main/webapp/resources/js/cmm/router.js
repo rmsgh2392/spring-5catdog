@@ -12,21 +12,6 @@ function Session(x){
 		img : ()=>{return sessionStorage.getItem('img');}
 	}
 }
-	
-function Customer(x){
-	alert('dddd')
-	sessionStorage.setItem('cid',x.cid);
-	sessionStorage.setItem('pwd',x.pwd);
-	sessionStorage.setItem('pname',x.pname);
-	sessionStorage.setItem('creditcard',x.creditcard);
-
-	return{
-		cid : ()=>{return sessionStorage.getItem('cid')},
-		pwd : ()=>{return sessionStorage.getItem('pwd')},
-		pname : ()=>{return sessionStorage.getItem('pname')},
-		creditcard : ()=>{return sessionStorage.getItem('creditcard')}
-	}
-}
 
 /*
  * 이것이 저번에 자바에서 했던 자바스크립트 session코드 !!
