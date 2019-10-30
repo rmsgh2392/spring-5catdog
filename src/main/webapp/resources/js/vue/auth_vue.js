@@ -287,6 +287,9 @@ auth_vue = {
 		'    <label>'+
 		'      <a id="a_join"  href="#">회원가입</a>'+
 		'    </label>'+
+		'    <label>'+
+		'      <a id="a_admin"  href="#">관리자 모드</a>'+
+		'    </label>'+
 		'  <div id="login_btn"></div>'+
 		'  <p class="mt-5 mb-3 text-muted">© 2017-2019</p>'+
 		'  </div>'+

@@ -3,7 +3,7 @@
 var auth = auth || {};//객체가 딱 하나 만들어진다 .언제? index.jsp에서 cdn방식으로 한번 만들어진다 (싱글턴 객체)!! 
 auth =(()=>{
 	const WHEN_ERR ='당신은 실패자!!'
-	let _,js,css,img,auth_vuejs,brd_vuejs,brd_js,router_js,cookie_js;
+	let _,js,css,img,auth_vuejs,brd_vuejs,brd_js,router_js,cookie_js,adm_js;
 	let init =()=>{
 		_ = $.ctx()
 		js = $.js()
@@ -14,6 +14,7 @@ auth =(()=>{
 		brd_js = js+'/brd/brd.js'
 		router_js = js+'/cmm/router.js'
 		cookie_js = js+'/cmm/cookie.js'
+		adm_js = js+'/adm/adm.js'
 	}
 	let onCreate =()=>{
 		init();
@@ -21,7 +22,8 @@ auth =(()=>{
 				$.getScript(auth_vuejs),
 				$.getScript(router_js),
 				$.getScript(cookie_js),
-				$.getScript(brd_js)
+				$.getScript(brd_js),
+				$.getScript(adm_js)
 		)
 		.done(()=>{
         	setContentView()
@@ -68,6 +70,7 @@ auth =(()=>{
 						.appendTo('#btn_join')       		
     		})//$('#a_join')클릭이벤트 부분 
         }).fail(()=>{alert(WHEN_ERR)})//done(()=>{})부분
+        
 	}//onCreate()부분 끝
 	
 	let setContentView =()=>{
@@ -76,8 +79,8 @@ auth =(()=>{
 		$('body')
 		.addClass('text-center')
 		.html(auth_vue.login_body({css : $.css(),img : $.img()}))
-//		$('#cid').val('aaaaa')
 		login()
+		access()
 	}
 	
 		
@@ -146,6 +149,35 @@ auth =(()=>{
 			.addClass("btn btn-lg btn-primary btn-bloc")
 			.appendTo('#login_btn')
 		}
+	let access =()=>{
+		$('#a_admin').click(()=>{
+			let ok = confirm('사원입니까 ?')
+				if(ok){
+						let aid = prompt('사원번호를 입력하세오')
+						alert('입력한 사번 :'+aid ,'입력한 비번'+pwd)
+						$.ajax({
+							url : _+'/admins/'+aid,
+							type : 'POST',
+							data : JSON.stringify({aid : aid ,pwd : prompt('비밀번호를 입력하세요')}),
+							dataType : 'json',
+							contentType : 'application/json',
+							success : d=>{
+								if(d.msg==='success'){
+									alert('환영합니다.')
+									adm.onCreate()
+								}else{
+									alert('접근권한이 없습니다')
+									app.run(_)
+								}
+							},
+							error : e=>{
+								alert(WHEN_ERR)
+							}
+							
+						})
+				 	}
+				})
+			}
 	
 	return{onCreate ,join ,login}//자바스크립
 	

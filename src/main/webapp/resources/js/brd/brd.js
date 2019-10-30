@@ -99,9 +99,9 @@ brd = (()=>{
 		.click  (e=>{
 			e.preventDefault()
 			let json = {
-				cid :  $('#write_form input[name="writer"]').val(getCookie("cid")),
-				title : $('#write_form input[name="title"]').val(getCookie("title")),
-				content : $('#write_form textarea[name="content"]').val(getCookie("content"))
+				cid :  $('#write_form input[name="writer"]').val(),
+				title : $('#write_form input[name="title"]').val(),
+				content : $('#write_form textarea[name="content"]').val()
 			}
 			alert('title : '+json.title)
 			$.ajax({

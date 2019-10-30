@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Admin {
 	private String aid,pwd,ssn,creditcard,pname,phone,address,email;
+	//aid사원번호
 }

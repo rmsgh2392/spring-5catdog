@@ -26,7 +26,9 @@ navi =(()=>{
         .appendTo('#menu_text')
         .click(e=>{
         	 e.preventDefault()
-        	 brd.write()
+        	 brd.write({cid :  $('#write_form input[name="writer"]').val(),
+				title : $('#write_form input[name="title"]').val(),
+				content : $('#write_form textarea[name="content"]').val()})
         })
         $('<a>',{
 			href : '#',

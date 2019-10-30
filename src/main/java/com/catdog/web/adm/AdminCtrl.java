@@ -1,35 +1,61 @@
 package com.catdog.web.adm;
 
-import org.slf4j.Logger;
+import java.util.List;
+import java.util.Map;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.catdog.web.cmm.IConsumer;
 import com.catdog.web.cmm.IFunction;
-
-import com.catdog.web.cur.CustomerMapper;
+import com.catdog.web.utl.Printer;
 
 @RestController
 @RequestMapping("/admins")
 public class AdminCtrl {
-	private static final Logger logger = LoggerFactory.getLogger(AdminCtrl.class);
 	@Autowired Admin admin;
+	@Autowired Map<String, Object> map;
+	@Autowired List<Admin> list;
 	@Autowired AdminMapper adminMapper;
+	@Autowired Printer printer;
+	
 	
 	@PostMapping("/")
-	public String join(@RequestBody Admin param) {
-		IConsumer<Admin> c = t-> adminMapper.insertAdmin(t);
-		c.accept(param);
-		return "gg";
+	public Map<?,?> register(@RequestBody Admin param){
+		return map;
 	}
-	@PostMapping("/login")
-	public Admin login (@RequestBody Admin param) {
-		IFunction<Admin,Admin> a = t->adminMapper.selectByAid(param);
-		return a.apply(param);
+	
+	@PostMapping("/{aid}")
+	public Map<?,?> access(@PathVariable String aid ,@RequestBody Admin param){
+		printer.accept(param.toString());
+		printer.accept("admin 컨트롤러 access들어옴");
+		IFunction<Admin,Admin> f = t-> adminMapper.access(t);
+		map.clear();
+		map.put("msg", (f.apply(param) !=null) ? "success" : "fail");
+		printer.accept("db값" +f.apply(param));
+		return map;
+//		f.apply(param) !=null ? "success" : "fail"
 	}
+	@GetMapping("/{aid}")
+	public List<Admin> selectAdmin(@PathVariable String aid , @RequestBody Admin param){
+		return list;
+	}
+	@PutMapping("/{aid}")
+	public Admin updateAdmin(@PathVariable String aid ,@RequestBody Admin param) {
+		return admin;
+	}
+	@DeleteMapping("{aid}")
+	public Map<?,?> deleteAdmin(@PathVariable String aid , @RequestBody Admin param){
+		return map;
+	}
+	
+	
+	
 }
