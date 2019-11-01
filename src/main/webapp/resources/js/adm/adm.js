@@ -111,6 +111,7 @@ adm =(()=>{
 		$.each(crawl,(i,j)=>{
 			$('<option name="'+j.name+'">'+j.name+'</option>').appendTo('#crawl_form select')
 		})
+//		test
 //		$('#right').empty()
 //		$('</br></br></br></br></br><h2>Web Crawling</h2></br></br></br></br></br></br></br>'+
 //				'<form id="crawl_form" class="form-inline my-2 my-lg-0" action="https://www.naver.com">'+
