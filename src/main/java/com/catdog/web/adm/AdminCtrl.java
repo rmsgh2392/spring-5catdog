@@ -22,7 +22,7 @@ import com.catdog.web.utl.Printer;
 public class AdminCtrl {
 	@Autowired Admin admin;
 	@Autowired Map<String, Object> map;
-	@Autowired List<Admin> list;
+	@Autowired List<Admin> adminList;
 	@Autowired AdminMapper adminMapper;
 	@Autowired Printer printer;
 	
@@ -45,7 +45,7 @@ public class AdminCtrl {
 	}
 	@GetMapping("/{aid}")
 	public List<Admin> selectAdmin(@PathVariable String aid , @RequestBody Admin param){
-		return list;
+		return adminList;
 	}
 	@PutMapping("/{aid}")
 	public Admin updateAdmin(@PathVariable String aid ,@RequestBody Admin param) {

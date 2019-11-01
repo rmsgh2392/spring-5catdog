@@ -101,32 +101,34 @@ adm =(()=>{
 				'  <select name="web" size="1">'+
 				'  </select>'+
 				'   <input type="url" placeholder="insert URL" action="https://www.naver.com" value="https://www.naver.com">'+
-				'   <input type="submit" value="전송">'+
 				'</form>').appendTo('#right')
 		$('#crawl_form input[type="url"]').css({width :'60%'})
-		let crawl = [{name : 'naver'},
-					 {name : 'google'},
-					 {name : 'daum'},
-					 {name : 'youtube'}]
+		let crawl = [{value : 'naver.com' ,url : 'https://www.naver.com'},
+					 {value : 'google.com' ,url : 'https://www.naver.com'},
+					 {value : 'daum.com' ,url: 'https://www.naver.com'},
+					 {value : 'youtube.com',url : 'https://www.naver.com'}]
 		$.each(crawl,(i,j)=>{
-			$('<option name="'+j.name+'">'+j.name+'</option>').appendTo('#crawl_form select')
+			$('<option value="'+j.value+'">'+j.value+'</option>')
+			.appendTo('#crawl_form select')
+			})
+//			$('<div id="result">').appendTo('#right')
+			$('<input type="submit" value="전송">')
+			.appendTo('#crawl_form')
+			.click(e=>{
+				e.preventDefault()
+				if(
+				!$.fn.nullChecker([$('form#crawl_form select[name="web"]').val(),
+						$('form#crawl_form input[type="url"]').val()])){
+				
+				$.getJSON(_+'/tx/crawling/'+$('form#crawl_form select[name="web"]').val()
+						   +'/'+$('form#crawl_form input[type="url"]').val(),d=>{
+				//이 검색어의 주소가 어디냐 그 주소에서 데이터를 가져온다 (이미 그 주소에 존재하고 있는 데이터)
+					 $('<textarea>',{
+						 	text : d.text
+					 }).appendTo('#right').css({width :'100%', height:'70%'})
+				})
+				}
 		})
-//		test
-//		$('#right').empty()
-//		$('</br></br></br></br></br><h2>Web Crawling</h2></br></br></br></br></br></br></br>'+
-//				'<form id="crawl_form" class="form-inline my-2 my-lg-0" action="https://www.naver.com">'+
-//				'  <select name="cars" size="1" multiple>'+
-//				'  </select>'+
-//		          '<input class="form-control mr-sm-2" type="text" placeholder="insert URL for crawling" aria-label="Search">'+
-//		          '<button class="btn btn-secondary my-2 my-sm-0" type="submit">go crawl</button>'+
-//				'</form>')
-//		.appendTo('#right')
-//		$('#crawl_form input[class="form-control mr-sm-2"]')
-//		.css({width:'80%'})
-//		$.each([{sub:'naver'},{sub:'daum'},{sub:'google'},{sub:'youtube'}],(i,j)=>{
-//			$('<option name='+j.sub+'>'+j.sub+'</option>').appendTo('#crawl_form select')
-//		})
-		
-	}
+    }
 	return{onCreate}
 })()
