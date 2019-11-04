@@ -33,7 +33,7 @@ public class Proxy {
 		try {
 			Connection.Response respone = Jsoup.connect(url).method(Connection.Method.GET).execute();
 			Document document = respone.parse();
-			String text = document.text();
+			String text = document.html();
 			proxyList.add(text);
 			printer.accept("크롤링한 값  \n: "+text);
 

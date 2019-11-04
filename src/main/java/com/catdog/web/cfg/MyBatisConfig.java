@@ -11,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @MapperScan(basePackages = {"com.catdog.web"})
+//@EnableAspectJAutoProxy
+//@EnableTransactionManagement
 public class MyBatisConfig {
+	
 	@Autowired 
 	ApplicationContext applicationContext;
 //	스프링이 만든 context를 가져온거 

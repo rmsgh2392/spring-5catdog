@@ -8,4 +8,15 @@
 			FROM ADMIN
 			WHERE AID LIKE #{aid}
    		</select> 
+			<!--  <if test="pwd != null"> 자바에서 pwd에 대한 값을 안해주면 if문 에 쿼리는 안보인다.
+				AND PWD LIKE #{pwd}
+			</if>-->
+   		<select id="selectAdmin2" resultType="Admin" parameterType="hashMap">
+   			SELECT *
+   			FROM ADMIN
+   		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+   			WHERE ${uid} LIKE #{uid}<!-- #은 ''가 포함도니거 $는 포함 안된것 -->
+   			AND ${pwd} LIKE #{pwd}<!-- '${PWD}' 와 #{PWD}똑같고 '%${PWD}%' PWD에 A 값을 주면 A가 들어있는 값들을 다 불러옴  -->
+   		</trim >
+   		</select>
     </mapper>
