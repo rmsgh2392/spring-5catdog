@@ -1,5 +1,6 @@
 package com.catdog.web.brd;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -35,17 +36,17 @@ public class ArticleCtrl {
 	
 	@PostMapping("/")
 	public Map<?,?> UpdateWrite(@RequestBody Article param ) {
+		//파라미터와 리턴 사이에 =>에로우펑션을 쓴다. 람다 ~~
+		//한줄이면 블락 생략 가능 위에 제네릭스로 아티클이라는 객체가 이미 타입이 있어서 아티클도 제거 
 		printer.accept("brdctrl에 들어옴");
 		param.setBoardType("마이펫 게시판");
 		printer.accept("cid :" +param.toString());
 		IConsumer<Article> c = t-> articleMapper.insertArticle(t);
-		//파라미터와 리턴 사이에 =>에로우펑션을 쓴다. 람다 ~~
-		//한줄이면 블락 생략 가능 위에 제네릭스로 아티클이라는 객체가 이미 타입이 있어서 아티클도 제거 
-		map.clear();
 		c.accept(param);
+		map.clear();
 		map.put("msg", "success");
 		printer.accept("map ::" +map);
-		ISupplier<Integer> s = ()-> articleMapper.countArticle();
+		ISupplier<String> s = ()-> articleMapper.countArticle();
 		map.put("count",s.get());
 		printer.accept("카운트 값 :"+s.get());
 		return map;
@@ -61,12 +62,14 @@ public class ArticleCtrl {
 		return map;
 	}
 	
-	@GetMapping("/")
-	public List<Article> list(){
-		list.clear();//하기전에 깨끗이 클리어하고 하자 !!
+	@GetMapping("/page/{pageNo}")
+	public Map<?,?> list(@PathVariable String pageNo){
+		map.clear();//하기전에 깨끗이 클리어하고 하자 !!
 		ISupplier<List<Article>> s = ()-> articleMapper.selectAllArticle();//제네릭스 안에 제네릭스가 들어갈 수 있다.
-		printer.accept("전체 글 목록 :\n"+ s.get());
-		return 	s.get();
+		printer.accept("해당페이지 :\n"+ s.get());
+		map.put("articles",s.get());
+		map.put("pages",Arrays.asList(1,2,3));
+		return 	map;
 	}
 	
 	@GetMapping("/{articleseq}")
@@ -95,7 +98,7 @@ public class ArticleCtrl {
 
 	@GetMapping("/count")
 	public Map<?,?> count(){
-		ISupplier<Integer> s = ()-> articleMapper.countArticle();
+		ISupplier<String> s = ()-> articleMapper.countArticle();
 		printer.accept("카운트 값 :"+s.get());
 		map.clear();
 		map.put("count",s.get());

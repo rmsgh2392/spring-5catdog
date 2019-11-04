@@ -9,7 +9,7 @@
 			WHERE AID LIKE #{aid}
    		</select> 
 			<!--  <if test="pwd != null"> 자바에서 pwd에 대한 값을 안해주면 if문 에 쿼리는 안보인다.
-				AND PWD LIKE #{pwd}ff
+				AND PWD LIKE #{pwd}
 			</if>-->
    		<select id="selectAdmin2" resultType="Admin" parameterType="hashMap">
    			SELECT *

@@ -50,11 +50,11 @@ navi =(()=>{
 			$.getScript(auth_js),
 			$.getScript(brd_js))
 		.done(()=>{
+			setContentView()
 		})
 		.fail(()=>{
 			alert('안됨')
 		})
-		setContentView()
 	}
 	
 	return{onCreate}

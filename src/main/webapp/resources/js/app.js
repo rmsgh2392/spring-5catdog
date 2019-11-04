@@ -19,6 +19,7 @@ var app = (()=>{
 		css = $.css()
 		img = $.img()
 		authjs = $.js()+'/cmm/auth.js'
+		alert('ctx :'+_)
 		//init()은 생성자라서 oncreate까지 간다.
 	}
 	let onCreate =()=>{

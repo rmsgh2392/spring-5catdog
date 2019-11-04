@@ -5,15 +5,18 @@
     <mapper namespace="com.catdog.web.brd.ArticleMapper">
     	<insert id="insertArticle" parameterType="Article">
         INSERT INTO ARTICLES (CID, RATING, BOARD_TYPE, TITLE, CONTENT) values (
-           #{cid}, #{rating}, #{board_type}, #{title}, #{content})
+           #{cid}, #{rating}, #{boardType}, #{title}, #{content})
     	</insert>
     	
-    	<select id="countArticle" resultType="int">
+    	<select id="countArticle" resultType="string">
     		SELECT COUNT(*) FROM ARTICLES
     	</select>
     	<!-- as 뒤에는 자바랑 똑같이 해줘야한다. 자바의 변수들은 언더바를 안하기 떄문에 alias를 주어서 자바랑 같게 해준다. -->
     	<select id="selectAllArticle" resultType="Article">
-    		SELECT A.BOARD_TYPE AS boardType, A.* FROM ARTICLES A 
+    		SELECT A.BOARD_TYPE AS boardType, A.* FROM
+			(SELECT * FROM ARTICLES
+			order by ARTICLESEQ DESC) A
+			LIMIT 0,3
     	</select>
     	
     	<select id="deleteArticle" parameterType="Article">
