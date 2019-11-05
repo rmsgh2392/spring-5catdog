@@ -18,9 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.catdog.web.cmm.IConsumer;
 import com.catdog.web.cmm.IFunction;
+import com.catdog.web.cmm.IPredicate;
 import com.catdog.web.cmm.ISupplier;
 import com.catdog.web.cur.CustomerCtrl;
+import com.catdog.web.pxy.Proxy;
+import com.catdog.web.pxy.ProxyMap;
 import com.catdog.web.utl.Printer;
+
+
+import lombok.experimental.PackagePrivate;
 
 @RestController
 @RequestMapping("/articles")//상수풀로 처리 
@@ -28,9 +34,10 @@ public class ArticleCtrl {
 	private static final Logger logger = LoggerFactory.getLogger(ArticleCtrl.class);
 	@Autowired Printer printer;
 	@Autowired Article article;
-	@Autowired Map<String,Object> map;
+	@Autowired ProxyMap map;
 	@Autowired ArticleMapper articleMapper;
 	@Autowired List<Article> list;
+	@Autowired Proxy proxy;
 
 	
 	
@@ -43,33 +50,34 @@ public class ArticleCtrl {
 		printer.accept("cid :" +param.toString());
 		IConsumer<Article> c = t-> articleMapper.insertArticle(t);
 		c.accept(param);
-		map.clear();
-		map.put("msg", "success");
 		printer.accept("map ::" +map);
 		ISupplier<String> s = ()-> articleMapper.countArticle();
-		map.put("count",s.get());
-		printer.accept("카운트 값 :"+s.get());
-		return map;
+		map.accept(Arrays.asList("msg","count"),
+				Arrays.asList("success",s.get()));
+		return map.get();
 	}
 	@PostMapping("/{articleseq}")
 	public Map<?,?> deleteArticle(@PathVariable String articleseq , @RequestBody Article param ){
 		printer.accept("삭제하고싶음 들어와");
-		map.clear();
+//		map.clear();
 		IConsumer<Article> c = t-> articleMapper.deleteArticle(t);
 		c.accept(param);
-		map.put("msg","success");
-		printer.accept("map ::" +map);
-		return map;
+		map.accept(Arrays.asList("msg"),Arrays.asList("success"));
+//		map.put("msg","success");
+//		printer.accept("map ::" +map);
+		return map.get();
 	}
 	
-	@GetMapping("/page/{pageNo}")
-	public Map<?,?> list(@PathVariable String pageNo){
-		map.clear();//하기전에 깨끗이 클리어하고 하자 !!
-		ISupplier<List<Article>> s = ()-> articleMapper.selectAllArticle();//제네릭스 안에 제네릭스가 들어갈 수 있다.
+	@GetMapping("/page/{pageNo}/size/{pageSize}")//외부에서 페이지 번호만 들어옴 
+	public Map<?,?> list(@PathVariable String pageNo,@PathVariable String pageSize){
+		proxy.setPageNum(proxy.parseInt(pageNo));
+		proxy.setPageSize(proxy.parseInt(pageSize));
+		proxy.paging();
+		//하기전에 깨끗이 클리어하고 하자 !!
+		ISupplier<List<Article>> s = ()-> articleMapper.selectAllArticle(proxy);//제네릭스 안에 제네릭스가 들어갈 수 있다.
 		printer.accept("해당페이지 :\n"+ s.get());
-		map.put("articles",s.get());
-		map.put("pages",Arrays.asList(1,2,3));
-		return 	map;
+		map.accept(Arrays.asList("articles","pages"),Arrays.asList(s.get(),Arrays.asList(1,2,3,4,5)));
+		return 	map.get();
 	}
 	
 	@GetMapping("/{articleseq}")
@@ -100,8 +108,7 @@ public class ArticleCtrl {
 	public Map<?,?> count(){
 		ISupplier<String> s = ()-> articleMapper.countArticle();
 		printer.accept("카운트 값 :"+s.get());
-		map.clear();
-		map.put("count",s.get());
-		return map;
+		map.accept(Arrays.asList("count"),Arrays.asList(s.get()));
+		return map.get();
 	}
 }

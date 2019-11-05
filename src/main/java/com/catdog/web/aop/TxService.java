@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.catdog.web.pxy.Proxy;
 import com.catdog.web.utl.Printer;
 
 @Transactional

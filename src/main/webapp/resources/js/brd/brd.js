@@ -5,7 +5,7 @@
 //var js =  sessionStorage.getItem('js')
 var brd = brd || {}
 brd = (()=>{
-	let _,js,brd_js,brd_vuejs,router_js,navi_js,navi_vue_js,css,img,page_vue_js,cookie_js
+	let _,js,brd_js,brd_vuejs,router_js,navi_js,navi_vue_js,css,img,page_vue_js,cookie_js,compo_vue_js
 	
 	let init =()=>{
 		_ = sessionStorage.getItem('ctx')
@@ -19,7 +19,8 @@ brd = (()=>{
 		navi_vue_js = js+'/vue/navi_vue.js'
 		page_vue_js = js+'/vue/page_vue.js'
 		cookie_js = js+'/cmm/cookie.js'
-//		alert(".js :"+page_vue_js)
+		compo_vue_js = js+'/vue/compo_vue.js'
+		alert(" compo_vue_js :"+compo_vue_js)
 	}
 	
 	let setContentView =()=>{
@@ -29,7 +30,7 @@ brd = (()=>{
 //	        .append(navi_vue.navi)
 	        $(navi_vue.navi()).appendTo('#navigator')
 //	        $(page_vue.pagination()).appendTo('#pagenum')
-	        recent_updates()
+	        recent_updates({page:'1',size : '5'})
 	}
 	let onCreate =()=>{//액션같은거는 onCreate()에서 한다.
 		init()
@@ -37,7 +38,8 @@ brd = (()=>{
 				$.getScript(brd_vuejs), 
 				$.getScript(navi_js),
 				$.getScript(navi_vue_js),
-				$.getScript(page_vue_js)
+				$.getScript(page_vue_js),
+				$.getScript(compo_vue_js)
 		)
 		.done(()=>{
 			setContentView()
@@ -52,7 +54,7 @@ brd = (()=>{
 		  $('#recent_updates .media').remove()
 		  $('#suggestions').remove()
 	      $('#recent_updates .d-block').remove()
-	      $.getJSON(_+'/articles/page/'+x,d=>{
+	      $.getJSON(_+'/articles/page/'+x.page+'/size/'+x.size,d=>{
 	      //url는 명사로 해야함! count는 데이터베이스에 저장되지 않는 상태 데이터 글이 계속 추가하거나 제거할수록 시시각각 데이터의 상태가 바뀌니까 
 	    	  alert('길이 : '+Object.keys(d).length)
 	  			$.each(d.articles, (i,j)=>{//i는 인덱스 값 j가 우리가 하고싶은 article value ,get(i)
@@ -75,18 +77,32 @@ brd = (()=>{
                 //alert("i는"+i)
 	  			//태그 안에 들어가면 value 밖에들어가는값은 text
 	  			})
-	  			$(page_vue.pagination()).appendTo('#recent_updates')
+	  			$(page_vue.pagination()).appendTo('#recent_updates').css({'pading-left':'30%'})
 	  			$('#pagenum').empty()
-	  			let t = ''
-	  			let i = 0
-//	  			for(;i<d.length/5;i++){
-//	  				t += '<li class="page-item"><a class="page-link" href="#">'+(i+1)+'</a></li>'
-//	  			}
-//	  			$(t).appendTo('#pagenum')
+	  			$(compo_vue.page_size()).prependTo('div.container')
+	  			$.each(['5개씩','10개씩','15개씩','20개씩'],(i,j)=>{
+	  				$('<option value="'+j+'">'+j+'</option>').appendTo('#listSizeSelectDiv select')
+	  			})
+	  			$('<li class="page-item"><a class="page-link" href="#">이전</a></li>').prependTo('#pagenum')
 	  			$.each(d.pages,(i,j)=>{
 	  				$('<li class="page-item"><a class="page-link" href="#">'+j+'</a></li>').appendTo('#pagenum')
 	  			})
-	      })
+	  			$('<li class="page-item"><a class="page-link" href="#">다음</a></li>').appendTo('#pagenum')
+	  			$('#listSizeSelectDiv').css({float : 'right'})
+//	  			$('#recent_updates div.container h2').remove()
+//	  			 $(  '<form id="page_form" class="form-inline my-2 my-lg-0">'+
+//				'  <select name="page" size="1">'+
+//				'  </select>'+
+//				'</form>').prependTo('#recent_updates div.container')
+//	  			
+//				$('#page_form').css({width :'60%'})
+//					$.each(['5개씩','10개씩','15개씩','20개씩'],(i,j)=>{
+//						$('<option value="'+j+'">'+j+'</option>').appendTo('#page_form select')
+//				})
+//	  			$.each(d.pages,(i,j)=>{
+//	  				$('<li class="page-item"><a class="page-link" href="#">'+j+'</a></li>').appendTo('#pagenum')
+//	  			})
+	      	})
 		}
 	  			
 	  			//여기까지 each세상 이치세상은 아래 리센트 세상을 모른다.,$.()객체들은 독립적으로 움직이는 세상 
