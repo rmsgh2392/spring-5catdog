@@ -3,7 +3,9 @@ package com.catdog.web.pxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -23,7 +25,19 @@ import lombok.Data;
 @Data
 @Lazy
 public class Proxy {
-	private int pageNum, pageSize,startRow,endRow;
+	private int pageNum,
+				pageSize,
+				startRow,
+				endRow,
+				nextBlock,
+				prevBlock,
+				startPage,
+				endPage,
+				totalCount,
+				pageCount,
+				blockCount,
+				blockNum;
+	private boolean existPrev, existNext;
 	private String search;
 	private final int BLOCK_SIZE = 5;
 	@Autowired Printer printer;
@@ -33,22 +47,39 @@ public class Proxy {
 	@SuppressWarnings("unused")
 	public void paging() {
 		ISupplier<String> s = ()->articleMapper.countArticle();
-		int totalCount = Integer.parseInt(s.get());
-		int pageCount = (totalCount%pageSize==0)? totalCount/pageSize : (totalCount/pageSize)+1;
+		totalCount = Integer.parseInt(s.get());
+		printer.accept("전체 글 개수 : "+totalCount);
+		pageCount = (totalCount%pageSize==0)? totalCount/pageSize : (totalCount/pageSize)+1;
 //		startRow = (pageNum * pageSize)-pageSize
 		startRow = (pageNum-1)*pageSize;
 //		endRow = (pageSize % 5 == 0) ? startRow + 4 : startRow + (pageSize % 5);
 //		endRow = startRow + (5 * pageNum);
 		//endRow = startRow +4
 		endRow = (pageNum == pageCount) ? totalCount-1 : startRow + pageSize -1;
-		int blockCount = (pageCount%BLOCK_SIZE==0)? pageCount/BLOCK_SIZE : (pageCount/BLOCK_SIZE)+1;
-		int blockNum = 0;
-//		(pageNum-1)/blocksize
-		int startPage = 0;
-		int endPage = 0;
-		boolean existPrev = false;
-		boolean existNext = false;
-		
+	    blockCount = (pageCount%BLOCK_SIZE==0)? pageCount/BLOCK_SIZE : (pageCount/BLOCK_SIZE)+1;
+	    blockNum = (pageNum-1)/BLOCK_SIZE;
+		startPage = (blockNum * BLOCK_SIZE)+1; //page 는 1부터 찍게 하자 그래서 +1 따로 자바스크립트에서 추가하지말고 
+		endPage = (blockNum == (blockCount-1)) ? pageCount : (blockNum * 5) + BLOCK_SIZE;
+		//endpage = (blockNum == blockCount) ? blockCount -1 : startPage + BLOCK_SIZE;
+		//endpage = ((bl20ockNum+1) == blockCount) ? pageCount : startPage + (BLOCK_SIZE -1); --> 다른사람들 알고리즘 
+//		boolean existPrev = false;
+		// boolean existPrev = blockCount > 1
+		if(blockNum != 0) {
+			existPrev = true;
+		}else {
+			existPrev = false;
+		}
+		existNext = (blockCount-1) != blockNum;
+		//(blockNum +1) != blockCount;
+//		if((blockCount-1) != blockNum) {
+//			existNext = true;
+//		}else {
+//			existNext = false;
+//		}
+		nextBlock = startPage + BLOCK_SIZE;
+		prevBlock = startPage - BLOCK_SIZE;
+			
+//			 pages = BLOCK_SIZE;
 	}
 	public int parseInt(String param) {
 		Function<String, Integer> f = t ->Integer.parseInt(t);
@@ -72,5 +103,11 @@ public class Proxy {
 		}
 		
 		return proxyList;
+	}
+	public int random(int a, int b) {
+		printer.accept("ctrl에서 넘어온 파라미터 값 :"+a +','+ b );
+		BiFunction<Integer, Integer, Integer> f = (t,u) -> (int) (Math.random()*(u-t))+t;
+		f.apply(a,b);
+		return f.apply(a,b); 
 	}
 }

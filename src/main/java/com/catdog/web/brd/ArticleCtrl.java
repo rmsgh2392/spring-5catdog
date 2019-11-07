@@ -76,7 +76,10 @@ public class ArticleCtrl {
 		//하기전에 깨끗이 클리어하고 하자 !!
 		ISupplier<List<Article>> s = ()-> articleMapper.selectAllArticle(proxy);//제네릭스 안에 제네릭스가 들어갈 수 있다.
 		printer.accept("해당페이지 :\n"+ s.get());
-		map.accept(Arrays.asList("articles","pages"),Arrays.asList(s.get(),Arrays.asList(1,2,3,4,5)));
+		int ran = proxy.random(3,11);
+		printer.accept("랜덤값 :"+ran);
+		
+		map.accept(Arrays.asList("articles","proxy"),Arrays.asList(s.get(),proxy));
 		return 	map.get();
 	}
 	
