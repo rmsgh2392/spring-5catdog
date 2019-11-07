@@ -111,9 +111,10 @@ brd = (()=>{
 	  				}else{
 	  					$('<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>')
 		  				.appendTo('#pagenum')
-		  				.click(function(){
+		  				.click(function(){//호이스팅 떄문에 펑션을 쓰면 상수풀에 들어간다
 		  					alert('페이지 번호 >>>' +$(this).children('.page-link').text())
 		  					recent_updates({page:$(this).children('.page-link').text() , size : d.proxy.pageSize})
+		  					//시발 어렵다
 		  				})
 	  				}
 	  			}
